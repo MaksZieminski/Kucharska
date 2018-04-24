@@ -1,0 +1,81 @@
+﻿@using AplikacjaWebowa.Models
+@model AplikacjaWebowa.ViewModels.RecipeWithTypeViewModel
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Search", "Recipes"))
+{<br/><br/>
+    <table>
+     <thread>
+         <tr>
+             <td>
+                 <div class="form-group">
+
+                     <label>Wyszukaj przepisu</label>
+                     @Html.TextBoxFor(r => r.searchPhrase, "SearchPhrase", new {@class = "form-control"})
+                 </div>
+             </td>
+             <td>
+
+             
+                 <div>
+
+                     <button type="submit" , class="btn btn-primary">Szukaj</button>
+                 </div>
+             </td>
+         </tr>
+     </thread>
+ </table>
+}
+
+@if (!Model.recipes.Any())
+{
+    <p>We don't have any recipes yet.</p>
+}
+
+
+else
+{
+
+
+
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Przepis</th>
+                <th>Rodzaj</th>
+                <th>Wynik</th>
+                <th>Sprawdz</th>
+                <th>Usun</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var recipe in Model.recipes)
+            {
+            <tr>
+                <td>@Html.ActionLink(recipe.Title, "Edit", "Recipes", new { id = recipe.ID }, null)</td>
+                <td>@Model.types.Find(e => e.Id == recipe.RecipeTypeId).Name</td>
+                <td>@recipe.Score/5</td>
+                <td>
+                    @Html.ActionLink("Sprawdz", $"Details/{recipe.ID}", "Recipes", null, new { @class = "btn btn-primary" })
+                </td>
+                <td>
+                    @Html.ActionLink("X", $"Delete/{recipe.ID}", "Recipes", null, new { @class = "btn btn-primary" })
+                </td>
+
+            </tr>
+            }
+        </tbody>
+    </table>
+    <p>
+        @Html.ActionLink("Dodaj przepis", "New", "Recipes", null, new { @class = "btn btn-primary" })
+    </p>
+}
+
+</br>
+
